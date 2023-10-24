@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Three.js Grouped Sphere and Edges</title>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+<script>
+    // Create the scene
+    var scene = new THREE.Scene();
+
+    // Create a camera
+    var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 3;
+
+    // Create a renderer
+    var renderer = new THREE.WebGLRenderer( {antialias: true});
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // Create a geometry and a material then combine them into a mesh
+    var geometry = new THREE.SphereGeometry(1, 32, 32);
+    var material = new THREE.MeshPhongMaterial({color: 0x0077ff});
+    var sphere = new THREE.Mesh(geometry, material);
+
+    // Create an edges geometry and line material and combine them into a line segments mesh
+    var edges = new THREE.EdgesGeometry(geometry);
+    var lineMaterial = new THREE.LineBasicMaterial({color: 0x000000});
+    var lines = new THREE.LineSegments(edges, lineMaterial);
+
+    // Create a group and add the sphere and lines meshes to the group
+    var group = new THREE.Group();
+    group.add(sphere);
+    group.add(lines);
+
+    // Add the group to our scene
+    scene.add(group);
+
+    // Create a point light and add it to our scene
+    var pointLight = new THREE.PointLight(0xffffff);
+    pointLight.position.set(5, 5, 5);
+    scene.add(pointLight);
+
+    // Create a function to render our scene
+    function animate() {
+        requestAnimationFrame(animate);
+
+        // Rotate the group
+        group.rotation.x = Math.PI/4;
+        group.rotation.y -= 0.005;
+
+        // Render the scene from the perspective of the camera
+        renderer.render(scene, camera);
+    }
+
+    // Call our animate function
+    animate();
+
+</script>
+</body>
+</html>
